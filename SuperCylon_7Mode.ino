@@ -9,7 +9,7 @@
  * This code is written for the following parts list:
  *  - Total Control Lighting Developer's Shield + Enclosure
  *  - Total Control Pixed Strand (25 pixels)
- *  - 9 pixel segment of high-density WS8212 pixels (NEOPixel or Total Control) 
+ *  - 9 pixel segment of high-density WS2812 pixels (NEOPixel or Total Control) 
  *    The data pin on this strip is connected to D8 on the TCL Dev Sheild
  * 
  * This code requires the following libraries:
