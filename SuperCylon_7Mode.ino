@@ -26,8 +26,12 @@
  * the lighting strand as you adjust the potentiometers. Be sure to open the
  * serial monitor to see the color information on your computer.
  * 
-
-
+ *
+ * FINAL hardware tweak:  Wire up a CdS photocell to A5, with a 1k pulldown 
+ * to ground for auto-dimming of the preview display
+ * 
+ *
+ *
  * Mode selection:
  * 
  *  Switched modes:
@@ -177,6 +181,10 @@ void loop() {
 
 void update_strand() {
   int i;  // A local instance of 'i' so we don't interfere with other loops
+
+  float brightness = (float)map(analogRead(5), 1, 1023, 1, 100) / 100;
+
+  Serial.println(brightness);
   
     TCL.sendEmptyFrame();
   for(i=0;i<LEDCOUNT;i++) {
@@ -184,15 +192,16 @@ void update_strand() {
   }
   TCL.sendEmptyFrame();
   
-  strip.setPixelColor(0, ((red_values[0] + red_values[1] + red_values[2])/ (3 * PREVIEWDIM)), ((green_values[0] + green_values[1] + green_values[2])/ (3 * PREVIEWDIM)), ((blue_values[0] + blue_values[1] + blue_values[2])/ (3 * PREVIEWDIM)));
-  strip.setPixelColor(1, ((red_values[3] + red_values[4] + red_values[5])/ (3 * PREVIEWDIM)), ((green_values[3] + green_values[4] + green_values[5])/ (3 * PREVIEWDIM)), ((blue_values[3] + blue_values[4] + blue_values[5])/ (3 * PREVIEWDIM)));
-  strip.setPixelColor(2, ((red_values[6] + red_values[7] + red_values[8])/ (3 * PREVIEWDIM)), ((green_values[6] + green_values[7] + green_values[8])/ (3 * PREVIEWDIM)), ((blue_values[6] + blue_values[7] + blue_values[8])/ (3 * PREVIEWDIM)));
-  strip.setPixelColor(3, ((red_values[9] + red_values[10] + red_values[11])/ (3 * PREVIEWDIM)), ((green_values[9] + green_values[10] + green_values[11])/ (3 * PREVIEWDIM)), ((blue_values[9] + blue_values[10] + blue_values[11])/ (3 * PREVIEWDIM)));
-  strip.setPixelColor(4, (red_values[12]/4), (green_values[12]/4), (blue_values[12]/ PREVIEWDIM ));
-  strip.setPixelColor(5, ((red_values[13] + red_values[14] + red_values[15])/ (3 * PREVIEWDIM)), ((green_values[13] + green_values[14] + green_values[15])/ (3 * PREVIEWDIM)), ((blue_values[13] + blue_values[14] + blue_values[15])/ (3 * PREVIEWDIM)));
-  strip.setPixelColor(6, ((red_values[16] + red_values[17] + red_values[18])/ (3 * PREVIEWDIM)), ((green_values[16] + green_values[17] + green_values[18])/ (3 * PREVIEWDIM)), ((blue_values[16] + blue_values[17] + blue_values[18])/ (3 * PREVIEWDIM)));
-  strip.setPixelColor(7, ((red_values[19] + red_values[20] + red_values[21])/ (3 * PREVIEWDIM)), ((green_values[19] + green_values[20] + green_values[21])/ (3 * PREVIEWDIM)), ((blue_values[19] + blue_values[20] + blue_values[21])/ (3 * PREVIEWDIM)));
-  strip.setPixelColor(8, ((red_values[22] + red_values[23] + red_values[24])/ (3 * PREVIEWDIM)), ((green_values[22] + green_values[23] + green_values[24])/ (3 * PREVIEWDIM)), ((blue_values[22] + blue_values[23] + blue_values[24])/ (3 * PREVIEWDIM)));
+  strip.setPixelColor(0, (int((red_values[0] + red_values[1] + red_values[2]) / 3 * brightness)), (int((green_values[0] + green_values[1] + green_values[2]) / 3 * brightness)), (int((blue_values[0] + blue_values[1] + blue_values[2]) / 3 * brightness)));
+  strip.setPixelColor(1, (int((red_values[3] + red_values[4] + red_values[5]) / 3 * brightness)), (int((green_values[3] + green_values[4] + green_values[5]) / 3 * brightness)), (int((blue_values[3] + blue_values[4] + blue_values[5]) / 3 * brightness)));
+  strip.setPixelColor(2, (int((red_values[6] + red_values[7] + red_values[8]) / 3 * brightness)), (int((green_values[6] + green_values[7] + green_values[8]) / 3 * brightness)), (int((blue_values[6] + blue_values[7] + blue_values[8]) / 3 * brightness)));
+  strip.setPixelColor(3, (int((red_values[9] + red_values[10] + red_values[11]) / 3 * brightness)), (int((green_values[9] + green_values[10] + green_values[11]) / 3 * brightness)), (int((blue_values[9] + blue_values[10] + blue_values[11]) / 3 * brightness)));
+  strip.setPixelColor(4, (int(red_values[12] * brightness)), (int(green_values[12] * brightness)), (int(blue_values[12] * brightness)));
+  strip.setPixelColor(5, (int((red_values[13] + red_values[14] + red_values[15]) / 3 * brightness)), (int((green_values[13] + green_values[14] + green_values[15]) / 3 * brightness)), (int((blue_values[13] + blue_values[14] + blue_values[15]) / 3 * brightness)));
+  strip.setPixelColor(6, (int((red_values[16] + red_values[17] + red_values[18]) / 3 * brightness)), (int((green_values[16] + green_values[17] + green_values[18]) / 3 * brightness)), (int((blue_values[16] + blue_values[17] + blue_values[18]) / 3 * brightness)));
+  strip.setPixelColor(7, (int((red_values[19] + red_values[20] + red_values[21]) / 3 * brightness)), (int((green_values[19] + green_values[20] + green_values[21]) / 3 * brightness)), (int((blue_values[19] + blue_values[20] + blue_values[21]) / 3 * brightness)));
+  strip.setPixelColor(8, (int((red_values[22] + red_values[23] + red_values[24]) / 3 * brightness)), (int((green_values[22] + green_values[23] + green_values[24]) / 3 * brightness)), (int((blue_values[22] + blue_values[23] + blue_values[24]) / 3 * brightness)));
+
   strip.show();
 
   
